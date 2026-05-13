@@ -1,0 +1,109 @@
+Claude Code Token Counter — Status Line Plugin
+================================================
+
+Displays real-time rate limit and context window usage directly in your
+Claude Code status line with colored progress bars.
+
+Shows:
+  • 5h  — 5-hour rate limit % used (green/yellow/red) + reset countdown
+  • 7d  — 7-day rate limit % used + reset countdown
+  • ctx — Context window % used + token count (e.g. 125k, 1.2M)
+
+
+REQUIREMENTS
+------------
+  • Claude Code CLI (v1.0.24+)
+  • Python 3.6+
+  • Bash
+
+
+QUICK INSTALL (automated)
+-------------------------
+  git clone https://github.com/YOUR_USERNAME/claude-code-token-counter.git
+  cd claude-code-token-counter
+  chmod +x install.sh
+  ./install.sh
+
+Then restart Claude Code.
+
+
+MANUAL INSTALL
+--------------
+1. Copy the two script files to ~/.claude/:
+
+     mkdir -p ~/.claude
+     cp claude-counter-statusline.py ~/.claude/
+     cp statusline-combined.sh ~/.claude/
+     chmod +x ~/.claude/claude-counter-statusline.py
+     chmod +x ~/.claude/statusline-combined.sh
+
+2. Edit your Claude Code settings file at ~/.claude/settings.json
+   (create it if it doesn't exist) and add/merge the statusLine block:
+
+     {
+       "statusLine": {
+         "type": "command",
+         "command": "/home/YOUR_USER/.claude/statusline-combined.sh",
+         "refreshInterval": 30
+       }
+     }
+
+   Replace /home/YOUR_USER with your actual home directory path.
+   On macOS: /Users/YOUR_USER/.claude/statusline-combined.sh
+
+   "refreshInterval" is in seconds — lower values update more often but
+   use slightly more resources. 30 is a good default.
+
+3. Restart Claude Code. The status line appears at the bottom of your terminal.
+
+
+UNINSTALL
+---------
+  chmod +x uninstall.sh
+  ./uninstall.sh
+
+Or manually:
+  rm ~/.claude/claude-counter-statusline.py
+  rm ~/.claude/statusline-combined.sh
+  # Remove the "statusLine" block from ~/.claude/settings.json
+
+
+HOW IT WORKS
+------------
+Claude Code pipes JSON status data (rate limits, context window info) to the
+statusLine command on each refresh. The shell wrapper passes that JSON to the
+Python script, which parses it and outputs ANSI-colored progress bars.
+
+Color thresholds:
+  • Green     — under 50% used
+  • Yellow    — 50-80% used
+  • Bold yellow — 80-95% used
+  • Bold red  — 95%+ used (approaching limit)
+
+The reset countdown shows time until the rate limit window resets:
+  • 4h32m — hours and minutes
+  • 45m   — minutes only
+  • 30s   — seconds (imminent reset)
+  • now   — resetting
+
+
+CONFIGURATION
+-------------
+You can adjust the refresh interval in settings.json:
+
+  "refreshInterval": 15    — update every 15 seconds (more responsive)
+  "refreshInterval": 60    — update every 60 seconds (less overhead)
+
+
+FILES
+-----
+  claude-counter-statusline.py  — Python script that formats the status output
+  statusline-combined.sh        — Bash wrapper that pipes stdin to the Python script
+  install.sh                    — Automated installer
+  uninstall.sh                  — Automated uninstaller
+  instructions.txt              — This file
+
+
+LICENSE
+-------
+MIT — do whatever you want with it.
