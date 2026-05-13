@@ -40,13 +40,13 @@ The status bar uses color-coded progress indicators:
 ### One-liner
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/claude-code-token-counter.git && cd claude-code-token-counter && chmod +x install.sh && ./install.sh
+git clone https://github.com/M4xSec/claude-code-token-counter.git && cd claude-code-token-counter && chmod +x install.sh && ./install.sh
 ```
 
 ### Step by step
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/claude-code-token-counter.git
+git clone https://github.com/M4xSec/claude-code-token-counter.git
 cd claude-code-token-counter
 chmod +x install.sh
 ./install.sh
